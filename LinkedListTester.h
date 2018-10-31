@@ -1,25 +1,28 @@
 /**
 *@author: Daniel Gonzalez
 *@file: LinkedListTester.h
-*@date: 2/5/2018
-*@brief: header file for linked list tester, which tests to ensure the linked list works 
+*@date: 10/31/2018
+*@brief: header file for linked list tester, which tests to ensure the linked list works
 */
 #ifndef LINKEDLISTTESTER_H
 #define LINKEDLISTTESTER_H
 
-#include "LinkedList.h"
+//Include Gibbons' Linked List
+#include "LinkedListOfInts.h"
+
 #include <stdlib.h>
 #include <cmath>
-
+#include <vector>
+#include <stdio.h>
 class LinkedListTester
-{   
-	public: 
+{
+	public:
 
 	LinkedListTester();
 
-	//This will call all your test methods
+	//This will call all test methods
 	void runTests();
-	 
+
 	private:
 
 	/**
@@ -30,13 +33,31 @@ class LinkedListTester
 	/**
 	* @brief Creates an empty list adds 1 value, verifies isEmpty() returns false
 	**/
-	void testInsertFrontSize();
+	void testInsertNotEmpty();
+	/**
+	*@brief Checks that insert inserted the correct entry in the front and increased length
+	*/
+	void testAddFront();
+
+	/**
+	* @brief Creates an empty list, verifies size() returns 0
+	**/
+	void testSizeEmpty();
+
+	/**
+	*	@brief Creates empty list, adds to front, verifies size is 1
+	**/
+	void testAddFrontSize();
 
 	/**
 	* @brief Creates an empty list, adds nodes, then adds node to back and verifies getLength() returns correct size
 	**/
-	void testInsertBackSize();
+	void testAddBackSize();
 
+	/**
+	*@brief Checks that insert inserted the correct entry in the back and increased length
+	*/
+	void testAddBack();
 	/**
 	* @brief Creates an empty list, adds nodes, then adds node to middle and verifies getLength() returns correct size
 	**/
@@ -56,12 +77,12 @@ class LinkedListTester
 	* @brief Creates an empty list, adds nodes, add/remove node to middle and verify getLength() returns correct size
 	**/
 	void testAddRemMidSize();
-	
+
 	/**
 	* @brief Creates an empty list, adds nodes, tries to return entry from out of bounds
 	**/
 	void testGetEntryBounds();
-	
+
 	/**
 	* @brief Creates an empty list, adds nodes, tries to return entry from front
 	**/
@@ -95,7 +116,7 @@ class LinkedListTester
 	* @brief Creates an empty list, adds nodes, tries to replace a middle node
 	**/
 	void testReplaceMid();
-	
+
 	/**
 	* @brief Creates an empty list, adds nodes, tries to replace the back node
 	**/
@@ -145,17 +166,9 @@ class LinkedListTester
 	*/
 	void testClearFilledLength();
 	/**
-	*@brief Checks that insert inserted the correct entry in the front and increased length
-	*/
-	void testInsertFront();
-	/**
 	*@brief Checks that insert inserted the correct entry in the mid and increased length
 	*/
 	void testInsertMid();
-	/**
-	*@brief Checks that insert inserted the correct entry in the back and increased length
-	*/
-	void testInsertBack();
 	/**
 	*@brief Checks insert bounds
 	*/
@@ -178,4 +191,4 @@ class LinkedListTester
 	void testRemoveBounds();
 
 };
-#endif 
+#endif
