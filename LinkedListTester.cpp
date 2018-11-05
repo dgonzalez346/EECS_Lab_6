@@ -20,13 +20,17 @@ void LinkedListTester::runTests()
 	testAddFront();
 	testAddFrontSize();
 	testSizeEmpty();
+	testSizeNonEmpty();
 	testAddBackSize();
 	testAddBack();
+	testAddBackCorrect();
 	testAddRemFrontSize();
+	testAddRemFrontLarge();
 	testAddRemBackSize();
+	testAddRemBackLarge();
+	testSearchTrue();
+	testSearchFalse();
 	/*
-	testInsertMiddleSize();
-	testAddRemMidSize();
 	testGetEntryBounds();
 	testGetEntryFront();
 	testGetEntryMid();
@@ -59,7 +63,7 @@ void LinkedListTester::runTests()
 void LinkedListTester::testEmpty()
 {
 	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Testing isEmpty: Size of empty list is zero: ";
+	cout<<"Testing isEmpty: isEmpty returns 0 on empty list: ";
 	if(testList->isEmpty())
 	{
 		cout<<"Passed\n";
@@ -74,11 +78,17 @@ void LinkedListTester::testInsertNotEmpty()
 	LinkedListOfInts* testList = new LinkedListOfInts();
 	cout<<"Testing isEmpty: Size of nonempty list is not zero: ";
 	testList->addFront(1);
-	if(!testList->isEmpty())
+	vector<int> testVec = testList->toVector();
+	if(!testVec.empty())//ensure something was added to the list
 	{
-		cout<<"Passed\n";
+		if(!testList->isEmpty())
+		{
+			cout<<"Passed\n";
+		}else{
+			cout<<"Failed\n";//This will only happen if isEmpty does not work
+		}
 	}else{
-		cout<<"Failed\n";
+		cout<<"\nNew List is not empty!!!!";
 	}
 	delete testList;
 }
@@ -86,10 +96,18 @@ void LinkedListTester::testInsertNotEmpty()
 void LinkedListTester::testAddFront()
 {
 	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Testing addFront: Function inserts correct entry: ";
-	testList->addFront(1);
+	cout<<"Testing addFront: addFront Function inserts correct entries: ";
+	vector<int> vecTemp;
+	vector<int>::iterator it;
+	int randv = (rand() % 100) + 2;
+	for(int i = 0; i < randv; i++){
+		it = vecTemp.begin();
+		it = vecTemp.insert(it,i);
+		testList->addFront(i);
+	}
+
 	vector<int> vecTest = testList->toVector();
-	if(vecTest[0] == 1)
+	if(vecTest == vecTemp)
 	{
 		cout<<"Passed\n";
 	}else
@@ -114,7 +132,33 @@ void LinkedListTester::testAddFrontSize()
 	}
 	delete testList;
 }
-
+void LinkedListTester::testSizeEmpty()
+{
+	LinkedListOfInts* testList = new LinkedListOfInts();
+	cout<<"Testing Size: Size of empty list returns 0: ";
+	if(testList->size() == 0){
+		cout<<"Passed\n";
+	}else{
+		cout<<"Failed\n";
+	}
+	delete testList;
+}
+void LinkedListTester::testSizeNonEmpty()
+{
+	LinkedListOfInts* testList = new LinkedListOfInts();
+	cout<<"Testing Size: Size of nonempty list returns correct size: ";
+	int randv = (rand() % 100) + 2;
+	for(int i = 0; i <= randv; i++){
+		testList->addFront(i);
+	}
+	vector<int> vecTest = testList->toVector();
+	if(testList->size() == vecTest.size()){
+		cout<<"Passed\n";
+	}else{
+		cout<<"Failed\n";
+	}
+	delete testList;
+}
 void LinkedListTester::testAddBackSize()
 {
 	LinkedListOfInts* testList = new LinkedListOfInts();
@@ -133,9 +177,10 @@ void LinkedListTester::testAddBack()
 {
 	LinkedListOfInts* testList = new LinkedListOfInts();
 	cout<<"Testing addBack: List returns correct entry after 1 addBack: ";
-	testList->addBack(1);
+	int randv = (rand() % 100) + 2;
+	testList->addBack(randv);
 	vector<int> vecTest = testList->toVector();
-	if(vecTest[0] == 1)
+	if(vecTest[0] == randv)
 	{
 		cout<<"Passed\n";
 	}else
@@ -144,12 +189,17 @@ void LinkedListTester::testAddBack()
 	}
 	delete testList;
 }
-
-void LinkedListTester::testSizeEmpty()
+void LinkedListTester::testAddBackCorrect()
 {
 	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Testing Size: Size of empty List is 0: ";
-	if(testList->size() == 0){
+	cout<<"Testing addBack: Method correctly inserts to back of list: ";
+	vector<int> vecTemp;
+	for(int i = 0; i <= 10; i++){
+		vecTemp.push_back(i);
+		testList->addBack(i);
+	}
+	vector<int> vecTest = testList->toVector();
+	if(vecTemp == vecTest){
 		cout<<"Passed\n";
 	}else{
 		cout<<"Failed\n";
@@ -159,14 +209,36 @@ void LinkedListTester::testSizeEmpty()
 void LinkedListTester::testAddRemFrontSize()
 {
 	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Testing removeFront: List has correct size after adding and removing from front: ";
-	testList->addFront(1);testList->removeFront();
+	cout<<"Testing removeFront: removeFront correctly removes element from list of size 1: ";
+	testList->addFront(1);
+	testList->removeFront();
 	vector<int> vecTest = testList->toVector();
-	if(vecTest.size() == 0)
-	{
+	if(vecTest.size() == 0){
 		cout<<"Passed\n";
-	}else
-	{
+	}else{
+		cout<<"Failed\n";
+	}
+	delete testList;
+}
+void LinkedListTester::testAddRemFrontLarge()
+{
+	LinkedListOfInts* testList = new LinkedListOfInts();
+	cout<<"Testing removeFront: removeFront correctly removes element from larger list: ";
+	vector<int> vecTemp;
+	vector<int>::iterator it;
+	int randv = (rand() % 100) + 2;
+	for(int i = 0; i < randv; i++){
+		it = vecTemp.begin();
+		it = vecTemp.insert(it,i);
+		testList->addFront(i);
+	}
+	it = vecTemp.begin();
+	it = vecTemp.erase(it);
+	testList->removeFront();
+	vector<int> vecTest = testList->toVector();
+	if(vecTemp.size() == vecTest.size()){
+		cout<<"Passed\n";
+	}else{
 		cout<<"Failed\n";
 	}
 	delete testList;
@@ -175,11 +247,33 @@ void LinkedListTester::testAddRemFrontSize()
 void LinkedListTester::testAddRemBackSize()
 {
 	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Testing removeBack: List has correct size after adding and removing from back: ";
-	testList->addFront(1);testList->removeBack();
+	cout<<"Testing removeBack: removeBack correctly removes element from list of size 1: ";
+	testList->addFront(1);
+	testList->removeBack();
 	vector<int> vecTest = testList->toVector();
-	if(vecTest.size() == 0)
-	{
+	if(vecTest.size() == 0){
+		cout<<"Passed\n";
+	}else{
+		cout<<"Failed\n";
+	}
+	delete testList;
+}
+void LinkedListTester::testAddRemBackLarge()
+{
+	LinkedListOfInts* testList = new LinkedListOfInts();
+	cout<<"Testing removeFront: removeFront correctly removes element from larger list: ";
+	vector<int> vecTemp;
+	vector<int>::iterator it;
+	int randv = (rand() % 100) + 2;
+	for(int i = 0; i < randv; i++){
+		it = vecTemp.begin();
+		it = vecTemp.insert(it,i);
+		testList->addFront(i);
+	}
+	vecTemp.pop_back();
+	testList->removeBack();
+	vector<int> vecTest = testList->toVector();
+	if(vecTemp.size() == vecTest.size()){
 		cout<<"Passed\n";
 	}else
 	{
@@ -187,259 +281,35 @@ void LinkedListTester::testAddRemBackSize()
 	}
 	delete testList;
 }
-/*
-void LinkedListTester::testInsertMiddleSize()
+void LinkedListTester::testSearchTrue()
 {
 	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"List has correct size after adding to middle: ";
+	cout<<"Testing search: search correctly returns True if element is in list: ";
 	int randv = (rand() % 100) + 2;
-	int i = 1;
-	while(i < randv)
-	{
-		testList->addFront(i,i);
-		i++;
-		j++;
+	testList->addFront(randv);
+	for(int i = 0; i < 10; i++){
+		testList->addFront(i);
 	}
-	testList->insert(floor(testList->getLength()/2), j);
-	if(testList->getLength() == j)
-	{
+	if(testList->search(randv)){
 		cout<<"Passed\n";
-	}else
-	{
+	}else{
 		cout<<"Failed\n";
 	}
 	delete testList;
 }
-*/
-/*
-void LinkedListTester::testAddRemMidSize()
-{
+void LinkedListTester::testSearchFalse(){
 	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"List has correct size after adding and removing from middle: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
+	cout<<"Testing search: search correctly returns False if element is not in list: ";
+	for(int i = 0; i < 10; i++){
+		testList->addFront(i);
 	}
-	testList->insert(floor(testList->getLength()/2), i);
-	testList->remove(floor(testList->getLength()/2));
-	if(testList->getLength() == i-1)
-	{
-		cout<<"Passed\n";
-	}else
-	{
+	if(testList->search(5000)){
 		cout<<"Failed\n";
-	}
-	delete testList;
-}
-void LinkedListTester::testGetEntryBounds()
-{
-	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Testing get entry out of bounds: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	int tester;
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
-	}
-	try
-	{
-		tester = testList->getEntry(i + 1);
-	}catch(const std::runtime_error& e)
-	{
+	}else{
 		cout<<"Passed\n";
-		delete testList;
-		return;
-	}
-	cout<<"Failed\n";
-	delete testList;
-}
-void LinkedListTester::testGetEntryFront()
-{
-	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Get entry from front of list: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	int tester = -1;//set tester to negative int since entries are all positive
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
-	}
-	tester = testList->getEntry(1);
-	if(tester > -1)
-	{
-		cout<<"Passed\n";
-	}else
-	{
-		cout<<"Failed\n";
 	}
 	delete testList;
 }
-void LinkedListTester::testGetEntryMid()
-{
-	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Get entry from middle of list: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	int tester = -1;//set tester to negative int since entries are all positive
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
-	}
-	tester = testList->getEntry(floor(testList->getLength()/2));
-	if(tester > -1)
-	{
-		cout<<"Passed\n";
-	}else
-	{
-		cout<<"Failed\n";
-	}
-	delete testList;
-}
-void LinkedListTester::testGetEntryBack()
-{
-	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Get entry from back of list: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	int tester = -1;//set tester to negative int since entries are all positive
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
-	}
-	tester = testList->getEntry(testList->getLength());
-	if(tester > -1)
-	{
-		cout<<"Passed\n";
-	}else
-	{
-		cout<<"Failed\n";
-	}
-	delete testList;
-}
-void LinkedListTester::testInsertInvalidPos()
-{
-	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Testing insert out of bounds: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
-	}
-	try
-	{
-		testList->insert(testList->getLength()+2,i + 2);
-	}catch(const std::runtime_error& e)
-	{
-		cout<<"Passed\n";
-		delete testList;
-		return;
-	}
-	cout<<"Failed\n";
-	delete testList;
-}
-/*
-void LinkedListTester::testReplaceBounds()
-{
-	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Testing replace out of bounds: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
-	}
-	try
-	{
-		testList->replace(testList->getLength()+2,i + 2);
-	}catch(const std::runtime_error& e)
-	{
-		cout<<"Passed\n";
-		delete testList;
-		return;
-	}
-	cout<<"Failed\n";
-	delete testList;
-}
-void LinkedListTester::testReplaceFront()
-{
-	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Replace entry in front of list: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	int tester = -1;//set tester to negative int since entries are all positive
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
-	}
-	testList->replace(1,tester);
-	if(testList->getEntry(1) == tester)
-	{
-		cout<<"Passed\n";
-	}else
-	{
-		cout<<"Failed\n";
-	}
-	delete testList;
-}
-
-void LinkedListTester::testReplaceMid()
-{
-	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Replace entry in middle of list: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	int tester = -1;//set tester to negative int since entries are all positive
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
-	}
-	int mid = floor(testList->getLength()/2);
-	testList->replace(mid,tester);
-	if(testList->getEntry(mid) == tester)
-	{
-		cout<<"Passed\n";
-	}else
-	{
-		cout<<"Failed\n";
-	}
-	delete testList;
-}
-void LinkedListTester::testReplaceBack()
-{
-	LinkedListOfInts* testList = new LinkedListOfInts();
-	cout<<"Replace entry in back of list: ";
-	int randv = (rand() % 100) + 2;
-	int i = 1;
-	int tester = -1;//set tester to negative int since entries are all positive
-	while(i < randv)
-	{
-		testList->insert(i,i);
-		i++;
-	}
-	testList->replace(testList->getLength(),tester);
-	if(testList->getEntry(testList->getLength()) == tester)
-	{
-		cout<<"Passed\n";
-	}else
-	{
-		cout<<"Failed\n";
-	}
-	delete testList;
-}
-*/
 /*
 void LinkedListTester::testCopyConstructFront()
 {

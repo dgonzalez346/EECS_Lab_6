@@ -45,6 +45,12 @@ class LinkedListTester
 	void testSizeEmpty();
 
 	/**
+	* @brief Creates a list, inserts a random number of elements, verifies
+	* 	size returns correct value.
+	**/
+	void testSizeNonEmpty();
+
+	/**
 	*	@brief Creates empty list, adds to front, verifies size is 1
 	**/
 	void testAddFrontSize();
@@ -55,29 +61,45 @@ class LinkedListTester
 	void testAddBackSize();
 
 	/**
-	*@brief Checks that insert inserted the correct entry in the back and increased length
+	* @brief Checks that insert inserted the correct entry in the back and increased length
 	*/
 	void testAddBack();
 	/**
-	* @brief Creates an empty list, adds nodes, then adds node to middle and verifies getLength() returns correct size
+	* @brief Check that addBack correctly adds elements to the back of the list,
+	* 	compares to vector push_back with same values.
 	**/
-	void testInsertMiddleSize();
-
+	void testAddBackCorrect();
 	/**
-	* @brief Creates an empty list, adds nodes, add a node and remove a node to/from front of list and verify getLength() returns correct size
+	* @brief Creates an empty list, add a node and remove a node to/from front of list and verify
+	* 	size == 0
 	**/
 	void testAddRemFrontSize();
 
 	/**
-	* @brief Creates an empty list, adds nodes, add/remove node to back and verify getLength() returns correct size
+	* @brief Creates list, adds many elements, removes 1 from front, verifies list is correct
+	**/
+	void testAddRemFrontLarge();
+	/**
+	* @brief Creates an empty list, adds an element, removes 1 from back, verifies list is correct
 	**/
 	void testAddRemBackSize();
-
+	/**
+	* @brief Creates empty list, adds many elements, removes 1 from back, verifies list is correct
+	**/
+	void testAddRemBackLarge();
 	/**
 	* @brief Creates an empty list, adds nodes, add/remove node to middle and verify getLength() returns correct size
 	**/
 	void testAddRemMidSize();
-
+	/**
+	* @brief Adds values to empty list including one random value, verifies search returns
+	* 	true for element in list
+	**/
+	void testSearchTrue();
+	/**
+	* @brief adds values to empty list, verifies search returns false for element not in list
+	**/
+	void testSearchFalse();
 	/**
 	* @brief Creates an empty list, adds nodes, tries to return entry from out of bounds
 	**/
