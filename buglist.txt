@@ -1,0 +1,6 @@
+Buglist:
+
+1. isEmpty does not return False when a list is not empty
+2. addBack does not add to the back of the list, adds to front instead
+3. removeFront does not remove the element from the list
+4. removeBack does not remove the element from the list
